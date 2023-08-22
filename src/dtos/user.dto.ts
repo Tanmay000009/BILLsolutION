@@ -1,32 +1,4 @@
-import {
-  IsBoolean,
-  IsEmail,
-  IsNotEmpty,
-  IsOptional,
-  IsString,
-  Validate
-} from 'class-validator';
-import { StrongPasswordValidator } from '../utils/customPasswordValidator';
-
-export class CreateUserDto {
-  @IsEmail()
-  @IsNotEmpty()
-  @IsString()
-  email: string;
-
-  @IsNotEmpty()
-  @IsString()
-  firstName: string;
-
-  @IsNotEmpty()
-  @IsString()
-  lastName: string;
-
-  @IsNotEmpty()
-  @IsString()
-  @Validate(StrongPasswordValidator)
-  password: string;
-}
+import { IsOptional, IsString } from 'class-validator';
 
 export class UpdateUserDto {
   @IsOptional()

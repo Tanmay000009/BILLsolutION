@@ -1,4 +1,4 @@
-import { CreateUserDto } from '../dtos/user.dto';
+import { SignupUserDto } from '../dtos/auth.dto';
 import { User } from '../models/User.model';
 import { ds } from '../utils/datasource';
 
@@ -8,14 +8,14 @@ const getByEmail = async (email: string) => {
   });
 };
 
-const createUser = async (user: CreateUserDto, firebaseId: string) => {
+const createUser = async (user: SignupUserDto, firebaseId: string) => {
   return await ds.getRepository(User).save({
     ...user,
     firebaseId
   });
 };
 
-const createAdmin = async (user: CreateUserDto, firebaseId: string) => {
+const createAdmin = async (user: SignupUserDto, firebaseId: string) => {
   return await ds.getRepository(User).save({
     ...user,
     firebaseId,
