@@ -1,3 +1,4 @@
+import { IsEnum, IsNotEmpty, IsNumber, IsUUID } from 'class-validator';
 import {
   Column,
   CreateDateColumn,
@@ -15,15 +16,21 @@ export class CartItem {
   @Column({
     type: 'uuid'
   })
+  @IsUUID()
+  @IsNotEmpty()
   itemId: string;
 
   @Column({
     type: 'enum',
     enum: CartItemType
   })
+  @IsEnum(CartItemType)
+  @IsNotEmpty()
   itemType: CartItemType;
 
   @Column()
+  @IsNumber()
+  @IsNotEmpty()
   quantity: number;
 }
 
