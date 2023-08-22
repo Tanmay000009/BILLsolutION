@@ -18,6 +18,12 @@ export class User {
   @Column()
   lastName: string;
 
+  @Column()
+  firebaseId: string;
+
+  @Column({ default: false })
+  isAdmin: boolean;
+
   @CreateDateColumn({ type: 'timestamp' })
   createdAt: Date;
 
