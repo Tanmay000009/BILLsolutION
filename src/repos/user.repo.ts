@@ -27,9 +27,19 @@ const updateUser = async (user: User) => {
   return await ds.getRepository(User).save(user);
 };
 
+const updateUserCart = async (user: User) => {
+  return await ds.getRepository(User).update(
+    { email: user.email },
+    {
+      cart: user.cart
+    }
+  );
+};
+
 export const userRepo = {
   getByEmail,
   createUser,
   createAdmin,
-  updateUser
+  updateUser,
+  updateUserCart
 };
