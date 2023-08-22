@@ -7,9 +7,21 @@ import {
   UpdateDateColumn
 } from 'typeorm';
 
+export enum CartItemType {
+  PRODUCT = 'PRODUCT',
+  SERVICE = 'SERVICE'
+}
 export class CartItem {
-  @Column()
-  productId: string;
+  @Column({
+    type: 'uuid'
+  })
+  itemId: string;
+
+  @Column({
+    type: 'enum',
+    enum: CartItemType
+  })
+  itemType: CartItemType;
 
   @Column()
   quantity: number;
