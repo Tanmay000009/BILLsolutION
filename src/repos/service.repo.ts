@@ -1,3 +1,4 @@
+import { In } from 'typeorm';
 import { CreateServiceDto } from '../dtos/service.dto';
 import { Service } from '../models/Service.model';
 import { ds } from '../utils/datasource';
@@ -12,6 +13,12 @@ const getAll = async (limit: number = 20, offset: number = 0) => {
 const getById = async (id: string) => {
   return await ds.getRepository(Service).findOne({
     where: { id }
+  });
+};
+
+const getByIds = async (ids: string[]) => {
+  return await ds.getRepository(Service).find({
+    where: { id: In(ids) }
   });
 };
 
@@ -30,6 +37,7 @@ const deleteService = async (id: string) => {
 export const serviceRepo = {
   getAll,
   getById,
+  getByIds,
   createService,
   updateService,
   deleteService

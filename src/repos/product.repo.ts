@@ -1,3 +1,4 @@
+import { In } from 'typeorm';
 import { CreateProductDto } from '../dtos/product.dto';
 import { Product } from '../models/Product.model';
 import { ds } from '../utils/datasource';
@@ -12,6 +13,12 @@ const getAll = async (limit: number = 20, offset: number = 0) => {
 const getById = async (id: string) => {
   return await ds.getRepository(Product).findOne({
     where: { id }
+  });
+};
+
+const getByIds = async (ids: string[]) => {
+  return await ds.getRepository(Product).find({
+    where: { id: In(ids) }
   });
 };
 
@@ -30,6 +37,7 @@ const deleteProduct = async (id: string) => {
 export const productRepo = {
   getAll,
   getById,
+  getByIds,
   createProduct,
   updateProduct,
   deleteProduct
