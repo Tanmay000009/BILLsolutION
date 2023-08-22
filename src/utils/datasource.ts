@@ -7,6 +7,9 @@ import {
 } from '../config/config';
 
 import { DataSource } from 'typeorm';
+import { User } from '../models/User.model';
+import { Product } from '../models/Product.model';
+import { Service } from '../models/Service.model';
 
 export const ds = new DataSource({
   type: 'postgres',
@@ -15,7 +18,7 @@ export const ds = new DataSource({
   username: DB_USERNAME,
   password: DB_PASSWORD,
   database: DATABASE,
-  entities: [],
+  entities: [User, Product, Service],
   logging: true,
   synchronize: true
 });
