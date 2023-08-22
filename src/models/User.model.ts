@@ -7,6 +7,14 @@ import {
   UpdateDateColumn
 } from 'typeorm';
 
+export class CartItem {
+  @Column()
+  productId: string;
+
+  @Column()
+  quantity: number;
+}
+
 @Entity()
 export class User {
   @PrimaryColumn()
@@ -23,6 +31,12 @@ export class User {
 
   @Column({ default: false })
   isAdmin: boolean;
+
+  @Column({
+    type: 'simple-array',
+    default: []
+  })
+  cart: CartItem[];
 
   @CreateDateColumn({ type: 'timestamp' })
   createdAt: Date;
