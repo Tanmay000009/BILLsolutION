@@ -1,5 +1,6 @@
 import * as admin from 'firebase-admin';
 import { NextFunction, Request, Response } from 'express';
+import { userRepo } from '../repos/user.repo';
 
 export const checkJWT = async (
   req: Request,
@@ -23,7 +24,16 @@ export const checkJWT = async (
     });
   }
 
-  // todo: verify user in database & set req.user
+  const user = await userRepo.getByEmail(dbUser.email as string);
+
+  if (!user) {
+    return res.status(401).json({
+      status: false,
+      message: 'User not found'
+    });
+  }
+
+  req.user = user;
 
   return next();
 };
