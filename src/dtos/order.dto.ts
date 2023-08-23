@@ -22,14 +22,6 @@ export class InvoiceItemDto extends CartItem {
   @IsPositive()
   tax: number;
 
-  @IsInstance(Product)
-  @IsOptional()
-  product?: Product;
-
-  @IsInstance(Service)
-  @IsOptional()
-  service?: Service;
-
   @IsArray()
   @IsString({ each: true })
   @IsNotEmpty()
