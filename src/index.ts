@@ -9,6 +9,7 @@ import userRoutes from './routes/user.routes';
 import productRoutes from './routes/product.routes';
 import serviceRoutes from './routes/service.routes';
 import cartRoutes from './routes/cart.routes';
+import orderRoutes from './routes/order.routes';
 configDotenv();
 
 const PORT = process.env.PORT ?? 3000;
@@ -33,5 +34,6 @@ app.use('/user', userRoutes);
 app.use('/product', productRoutes);
 app.use('/service', serviceRoutes);
 app.use('/cart', cartRoutes);
+app.use('/order', orderRoutes);
 
 app.listen(PORT, () => console.log(`Running on ${PORT} ⚡`));
