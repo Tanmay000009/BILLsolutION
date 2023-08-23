@@ -142,12 +142,8 @@ const addToCart = async (req: Request, res: Response) => {
     const cart = JSON.parse(user.cart) as CartItem[];
     items.map((item) => {
       if (item.itemType === CartItemType.PRODUCT) {
-        console.log('item is product: ', item);
-
         // find index of product in user cart
         const productIndex = cart.findIndex((cartItem) => {
-          console.log('cartItem: ', cartItem.itemId, cartItem.itemType);
-
           return (
             cartItem.itemId === item.itemId &&
             cartItem.itemType === CartItemType.PRODUCT
@@ -161,7 +157,6 @@ const addToCart = async (req: Request, res: Response) => {
           cart.push(item);
         }
       } else if (item.itemType === CartItemType.SERVICE) {
-        console.log('item is service: ', item);
         const serviceIndex = cart.findIndex(
           (cartItem) =>
             cartItem.itemId === item.itemId &&
