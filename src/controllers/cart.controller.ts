@@ -364,9 +364,46 @@ const removeCartItems = async (req: Request, res: Response) => {
   }
 };
 
+const clearCart = async (req: Request, res: Response) => {
+  try {
+    if (!req.user) {
+      return res.status(401).json({
+        status: false,
+        message: 'Unauthorized'
+      });
+    }
+
+    const user = await userRepo.getByEmail(req.user.email);
+
+    if (!user) {
+      return res.status(404).json({
+        status: false,
+        message: 'User not found'
+      });
+    }
+
+    user.cart = JSON.stringify([]);
+
+    await userRepo.updateUserCart(user);
+
+    return res.status(200).json({
+      status: true,
+      message: 'Cart cleared successfully',
+      data: []
+    });
+  } catch (error) {
+    console.log('Error in clearCart: ', error);
+    return res.status(500).json({
+      status: false,
+      message: 'Internal Server Error'
+    });
+  }
+};
+
 export const cartController = {
   getCart,
   addToCart,
   updateCartItems,
-  removeCartItems
+  removeCartItems,
+  clearCart
 };

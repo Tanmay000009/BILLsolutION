@@ -8,5 +8,6 @@ router.get('/', checkJWT, cartController.getCart);
 router.post('/', checkJWT, cartController.addToCart);
 router.put('/', checkJWT, cartController.updateCartItems);
 router.delete('/', checkJWT, cartController.removeCartItems);
+router.put('/clear', checkJWT, cartController.clearCart);
 
 export default module.exports = router;
