@@ -8,6 +8,7 @@ import {
 } from 'typeorm';
 import { Product } from './Product.model';
 import { Order } from './Order.model';
+import { Service } from './Service.model';
 
 @Entity()
 export class OrderItem {
@@ -17,14 +18,26 @@ export class OrderItem {
   @Column()
   quantity: number;
 
-  @Column()
+  @Column('float')
+  tax: number;
+
+  @Column('float')
   totalAmount: number;
 
+  @Column('float')
+  totalAmountWithoutTax: number;
+
   @Column()
-  totalTaxAmount: number;
+  taxCategories: string;
+
+  @Column()
+  taxBreakdown: string;
 
   @ManyToOne(() => Product)
   product: Product;
+
+  @ManyToOne(() => Service)
+  service: Service;
 
   @ManyToOne(() => Order, (order) => order.items)
   order: Order;

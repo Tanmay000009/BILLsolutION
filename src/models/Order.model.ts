@@ -12,8 +12,8 @@ import { OrderItem } from './OrderItem.model';
 
 @Entity()
 export class Order {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
   @ManyToOne(() => User, (user) => user.orders)
   user: User;
@@ -21,8 +21,11 @@ export class Order {
   @OneToMany(() => OrderItem, (orderItem) => orderItem.order, { cascade: true })
   items: OrderItem[];
 
-  @Column()
+  @Column('float')
   totalAmount: number;
+
+  @Column('float')
+  totalTax: number;
 
   @Column()
   status: string;
