@@ -53,7 +53,7 @@ export class User {
 
   @Column({
     type: 'simple-array',
-    default: []
+    default: ''
   })
   cart: CartItem[];
 
