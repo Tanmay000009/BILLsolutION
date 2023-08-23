@@ -20,3 +20,14 @@ export class SignupUserDto {
   @Validate(StrongPasswordValidator)
   password: string;
 }
+
+export class SigninUserDto {
+  @IsEmail()
+  @IsNotEmpty()
+  @IsString()
+  email: string;
+
+  @IsNotEmpty()
+  @IsString()
+  password: string;
+}

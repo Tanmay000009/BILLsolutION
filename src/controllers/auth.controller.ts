@@ -3,7 +3,13 @@ import { validate } from 'class-validator';
 import { Request, Response } from 'express';
 import { userRepo } from '../repos/user.repo';
 import admin from 'firebase-admin';
-import { SignupUserDto } from '../dtos/auth.dto';
+import {
+  getAuth,
+  sendPasswordResetEmail,
+  signInWithEmailAndPassword
+} from 'firebase/auth';
+import { SigninUserDto, SignupUserDto } from '../dtos/auth.dto';
+import { EmailValidationDto } from '../dtos/common.dto';
 
 const signupUser = async (req: Request, res: Response) => {
   try {
@@ -107,7 +113,104 @@ const createAdmin = async (req: Request, res: Response) => {
   }
 };
 
+const login = async (req: Request, res: Response) => {
+  try {
+    const converterObject = plainToInstance(SigninUserDto, req.body);
+
+    const errors = await validate(converterObject);
+
+    if (errors.length > 0) {
+      return res.status(400).json({
+        status: false,
+        message: errors
+      });
+    }
+
+    const auth = getAuth();
+
+    await signInWithEmailAndPassword(
+      auth,
+      converterObject.email,
+      converterObject.password
+    )
+      .then((userCredential) => {
+        const user = userCredential.user;
+        res.status(200).json({
+          status: true,
+          message: 'User logged in successfully',
+          data: user
+        });
+      })
+      .catch((error) => {
+        console.log('Error in signInWithEmailAndPassword: ', error);
+        res.status(500).json({
+          status: false,
+          message: 'Internal Server Error'
+        });
+      });
+    return res;
+  } catch (error) {
+    console.error('Error in login: ', error);
+    return res.status(500).json({
+      status: false,
+      message: 'Internal Server Error'
+    });
+  }
+};
+
+export const forgotPassword = async (req: Request, res: Response) => {
+  try {
+    const converterObject = plainToInstance(EmailValidationDto, {
+      email: req.body.email
+    });
+
+    const errors = await validate(converterObject);
+
+    if (errors.length > 0) {
+      return res.status(400).json({
+        status: false,
+        message: errors
+      });
+    }
+
+    const user = await userRepo.getByEmail(converterObject.email);
+
+    if (!user) {
+      return res.status(404).json({
+        status: false,
+        message: 'An link has been sent to your email.'
+      });
+    }
+
+    const auth = getAuth();
+
+    await sendPasswordResetEmail(auth, user.email)
+      .then(() => {
+        res.status(200).json({
+          status: true,
+          message: 'Password reset successfully'
+        });
+      })
+      .catch((error) => {
+        console.log('Error in sendPasswordResetEmail: ', error);
+        res.status(500).json({
+          status: false,
+          message: 'Internal Server Error'
+        });
+      });
+    return res;
+  } catch (error) {
+    console.error('Error in forgotPassword: ', error);
+    return res.status(500).json({
+      status: false,
+      message: 'Internal Server Error'
+    });
+  }
+};
+
 export const authController = {
   signupUser,
-  createAdmin
+  createAdmin,
+  login,
+  forgotPassword
 };

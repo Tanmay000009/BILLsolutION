@@ -6,5 +6,7 @@ const router = Router();
 
 router.post('/signup', authController.signupUser);
 router.post('/signup/admin', checkJWT, authController.createAdmin);
+router.post('/signin', authController.login);
+router.put('/forgot-password/:email', authController.forgotPassword);
 
 export default module.exports = router;
