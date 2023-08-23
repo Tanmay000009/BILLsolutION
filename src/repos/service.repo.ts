@@ -26,6 +26,10 @@ const createService = async (service: CreateServiceDto) => {
   return await ds.getRepository(Service).save(service);
 };
 
+const createServices = async (products: CreateServiceDto[]) => {
+  return await ds.getRepository(Service).save(products);
+};
+
 const updateService = async (service: Service) => {
   return await ds.getRepository(Service).save(service);
 };
@@ -39,6 +43,7 @@ export const serviceRepo = {
   getById,
   getByIds,
   createService,
+  createServices,
   updateService,
   deleteService
 };
