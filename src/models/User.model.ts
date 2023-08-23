@@ -15,6 +15,7 @@ import {
   PrimaryColumn,
   UpdateDateColumn
 } from 'typeorm';
+import { Order } from './Order.model';
 
 export enum CartItemType {
   PRODUCT = 'PRODUCT',
@@ -64,6 +65,9 @@ export class User {
     default: '[]'
   })
   cart: string;
+
+  @OneToMany(() => Order, (order) => order.user)
+  orders: Order[];
 
   @CreateDateColumn({ type: 'timestamp' })
   createdAt: Date;
