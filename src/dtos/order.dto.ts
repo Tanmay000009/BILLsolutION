@@ -1,16 +1,19 @@
 import {
   IsArray,
+  IsEnum,
   IsInstance,
   IsNotEmpty,
   IsNumber,
   IsObject,
   IsOptional,
   IsPositive,
-  IsString
+  IsString,
+  IsUUID
 } from 'class-validator';
 import { CartItem } from '../models/User.model';
 import { Product } from '../models/Product.model';
 import { Service } from '../models/Service.model';
+import { OrderStatus } from '../models/Order.model';
 
 export class InvoiceItemDto extends CartItem {
   @IsInstance(Product || Service)
@@ -34,4 +37,14 @@ export class InvoiceItemDto extends CartItem {
   taxBreakdown: {
     [key: string]: number;
   };
+}
+
+export class ProcessOrderDto {
+  @IsUUID()
+  @IsNotEmpty()
+  orderId: string;
+
+  @IsEnum(OrderStatus)
+  @IsNotEmpty()
+  status: OrderStatus;
 }

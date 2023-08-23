@@ -3,13 +3,74 @@ import { userRepo } from '../repos/user.repo';
 import { CartItem, CartItemType } from '../models/User.model';
 import { productRepo } from '../repos/product.repo';
 import { serviceRepo } from '../repos/service.repo';
-import { InvoiceItemDto } from '../dtos/order.dto';
+import { InvoiceItemDto, ProcessOrderDto } from '../dtos/order.dto';
 import { Product } from '../models/Product.model';
 import { Service } from '../models/Service.model';
 import { OrderItem } from '../models/OrderItem.model';
-import { Order } from '../models/Order.model';
+import { Order, OrderStatus } from '../models/Order.model';
 import { orderRepo } from '../repos/order.repo';
 import { orderItemRepo } from '../repos/orderItem.repo';
+import { plainToInstance } from 'class-transformer';
+import { UUIDValidationDto } from '../dtos/common.dto';
+import { validate } from 'class-validator';
+
+const getOrders = async (req: Request, res: Response) => {
+  try {
+    if (!req.user) {
+      return res.status(401).json({
+        status: false,
+        message: 'Unauthorized'
+      });
+    }
+
+    const limit = req.query.limit ? parseInt(req.query.limit as string) : 20;
+    const offset = req.query.offset ? parseInt(req.query.offset as string) : 0;
+
+    const orders = await orderRepo.getOrdersByUser(
+      req.user.email,
+      limit,
+      offset
+    );
+
+    return res.status(200).json({
+      status: true,
+      data: orders
+    });
+  } catch (error) {
+    console.error('Error in getOrders: ', error);
+    return res.status(500).json({
+      status: false,
+      message: 'Internal Server Error'
+    });
+  }
+};
+
+const adminGetOrders = async (req: Request, res: Response) => {
+  try {
+    if (!req.user) {
+      return res.status(401).json({
+        status: false,
+        message: 'Unauthorized'
+      });
+    }
+
+    const limit = req.query.limit ? parseInt(req.query.limit as string) : 20;
+    const offset = req.query.offset ? parseInt(req.query.offset as string) : 0;
+
+    const orders = await orderRepo.getOrders(limit, offset);
+
+    return res.status(200).json({
+      status: true,
+      data: orders
+    });
+  } catch (error) {
+    console.error('Error in adminGetOrders: ', error);
+    return res.status(500).json({
+      status: false,
+      message: 'Internal Server Error'
+    });
+  }
+};
 
 const generateInvoice = async (req: Request, res: Response) => {
   try {
@@ -114,7 +175,7 @@ const generateInvoice = async (req: Request, res: Response) => {
   }
 };
 
-const processOrder = async (req: Request, res: Response) => {
+const createOrder = async (req: Request, res: Response) => {
   try {
     if (!req.user) {
       return res.status(401).json({
@@ -204,7 +265,7 @@ const processOrder = async (req: Request, res: Response) => {
     const order = new Order();
     order.totalAmount = totalAmount;
     order.totalTax = totalTax;
-    order.status = 'PENDING';
+    order.status = OrderStatus.PENDING;
     order.user = user;
 
     invoiceItems.map((item) => {
@@ -247,6 +308,165 @@ const processOrder = async (req: Request, res: Response) => {
     });
   } catch (error) {
     console.error('Error in processOrder: ', error);
+    return res.status(500).json({
+      status: false,
+      message: 'Internal Server Error'
+    });
+  }
+};
+
+const processOrder = async (req: Request, res: Response) => {
+  try {
+    const bodyValidationObject = plainToInstance(ProcessOrderDto, req.body);
+
+    const errors = await validate(bodyValidationObject);
+
+    if (errors.length > 0) {
+      return res.status(400).json({
+        status: false,
+        message: 'Validation Error',
+        errors
+      });
+    }
+
+    if (!req.user) {
+      return res.status(401).json({
+        status: false,
+        message: 'Unauthorized'
+      });
+    }
+
+    const user = await userRepo.getByEmail(req.user.email);
+
+    if (!user) {
+      return res.status(404).json({
+        status: false,
+        message: 'User not found'
+      });
+    }
+
+    if (!user.isAdmin) {
+      return res.status(403).json({
+        status: false,
+        message: 'Forbidden'
+      });
+    }
+
+    const order = await orderRepo.getOrderById(bodyValidationObject.orderId);
+
+    if (!order) {
+      return res.status(404).json({
+        status: false,
+        message: 'Order not found'
+      });
+    }
+
+    if (order.status === OrderStatus.CANCELLED) {
+      return res.status(400).json({
+        status: false,
+        message: 'Order is Cancelled'
+      });
+    }
+
+    if (order.status !== OrderStatus.PENDING) {
+      return res.status(400).json({
+        status: false,
+        message: 'Order already processed'
+      });
+    }
+
+    order.status = bodyValidationObject.status;
+
+    await orderRepo.updateOrder(order);
+
+    return res.status(200).json({
+      status: true,
+      data: order,
+      message: 'Order Processed Successfully'
+    });
+  } catch (error) {
+    console.error('Error in confirmOrder: ', error);
+    return res.status(500).json({
+      status: false,
+      message: 'Internal Server Error'
+    });
+  }
+};
+
+const cancelOrder = async (req: Request, res: Response) => {
+  try {
+    const uuidValidationOnject = plainToInstance(
+      UUIDValidationDto,
+      req.params.id
+    );
+
+    const errors = await validate(uuidValidationOnject);
+
+    if (errors.length > 0) {
+      return res.status(400).json({
+        status: false,
+        message: 'Validation Error',
+        errors
+      });
+    }
+
+    if (!req.user) {
+      return res.status(401).json({
+        status: false,
+        message: 'Unauthorized'
+      });
+    }
+
+    const user = await userRepo.getByEmail(req.user.email);
+
+    if (!user) {
+      return res.status(404).json({
+        status: false,
+        message: 'User not found'
+      });
+    }
+
+    const order = await orderRepo.getOrderById(uuidValidationOnject.id);
+
+    if (!order) {
+      return res.status(404).json({
+        status: false,
+        message: 'Order not found'
+      });
+    }
+
+    if (order.status === OrderStatus.CANCELLED) {
+      return res.status(400).json({
+        status: false,
+        message: 'Order is already Cancelled'
+      });
+    }
+
+    if (order.status !== OrderStatus.PENDING) {
+      return res.status(400).json({
+        status: false,
+        message: 'Order already processed'
+      });
+    }
+
+    if (order.user.email !== user.email) {
+      return res.status(403).json({
+        status: false,
+        message: 'Forbidden'
+      });
+    }
+
+    order.status = OrderStatus.CANCELLED;
+
+    await orderRepo.updateOrder(order);
+
+    return res.status(200).json({
+      status: true,
+      data: order,
+      message: 'Order Cancelled Successfully'
+    });
+  } catch (error) {
+    console.error('Error in cancelOrder: ', error);
     return res.status(500).json({
       status: false,
       message: 'Internal Server Error'
@@ -323,6 +543,10 @@ const calculateServiceTax = (
 };
 
 export const orderController = {
+  getOrders,
+  adminGetOrders,
   generateInvoice,
-  processOrder
+  createOrder,
+  processOrder,
+  cancelOrder
 };

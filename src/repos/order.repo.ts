@@ -10,7 +10,8 @@ const getOrders = async (limit: number = 20, offset: number = 0) => {
 
 const getOrderById = async (id: string) => {
   return await ds.getRepository(Order).findOne({
-    where: { id }
+    where: { id },
+    relations: ['user', 'items']
   });
 };
 

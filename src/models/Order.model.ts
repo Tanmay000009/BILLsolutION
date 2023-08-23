@@ -10,6 +10,13 @@ import {
 import { User } from './User.model';
 import { OrderItem } from './OrderItem.model';
 
+export enum OrderStatus {
+  PENDING = 'PENDING',
+  COMPLETED = 'COMPLETED',
+  CANCELLED = 'CANCELLED',
+  FAILED = 'FAILED'
+}
+
 @Entity()
 export class Order {
   @PrimaryGeneratedColumn('uuid')
@@ -27,8 +34,11 @@ export class Order {
   @Column('float')
   totalTax: number;
 
-  @Column()
-  status: string;
+  @Column({
+    type: 'enum',
+    enum: OrderStatus
+  })
+  status: OrderStatus;
 
   @Column({ default: () => 'CURRENT_TIMESTAMP' })
   createdAt: Date;
