@@ -62,6 +62,8 @@ export const seeder = async () => {
   }
 
   console.log('Seeding completed');
+
+  process.exit(0);
 };
 
 seeder();
