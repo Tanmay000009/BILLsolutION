@@ -24,8 +24,9 @@ const getCart = async (req: Request, res: Response) => {
 
     const productIds: string[] = [];
     const serviceIds: string[] = [];
-
-    user.cart.map((item: CartItem) => {
+    // parse cart from user
+    const cart = JSON.parse(user.cart) as CartItem[];
+    cart.map((item: CartItem) => {
       if (item.itemType === CartItemType.PRODUCT) productIds.push(item.itemId);
       else serviceIds.push(item.itemId);
     });
@@ -34,7 +35,7 @@ const getCart = async (req: Request, res: Response) => {
 
     const services = await serviceRepo.getByIds(serviceIds);
 
-    const cartItems = user.cart.map((item: CartItem) => {
+    const cartItems = cart.map((item: CartItem) => {
       if (item.itemType === CartItemType.PRODUCT) {
         const product = products.find((p) => p.id === item.itemId);
         return {
@@ -138,42 +139,51 @@ const addToCart = async (req: Request, res: Response) => {
         message: 'One or More Service not found'
       });
     }
-
+    const cart = JSON.parse(user.cart) as CartItem[];
     items.map((item) => {
       if (item.itemType === CartItemType.PRODUCT) {
+        console.log('item is product: ', item);
+
         // find index of product in user cart
-        const productIndex = user.cart.findIndex(
-          (cartItem) =>
+        const productIndex = cart.findIndex((cartItem) => {
+          console.log('cartItem: ', cartItem.itemId, cartItem.itemType);
+
+          return (
             cartItem.itemId === item.itemId &&
             cartItem.itemType === CartItemType.PRODUCT
-        );
+          );
+        });
 
         // if product exists in cart
         if (productIndex !== -1) {
-          user.cart[productIndex].quantity += item.quantity;
+          cart[productIndex].quantity += item.quantity;
         } else {
-          user.cart.push(item);
+          cart.push(item);
         }
       } else if (item.itemType === CartItemType.SERVICE) {
-        const serviceIndex = user.cart.findIndex(
+        console.log('item is service: ', item);
+        const serviceIndex = cart.findIndex(
           (cartItem) =>
             cartItem.itemId === item.itemId &&
             cartItem.itemType === CartItemType.SERVICE
         );
 
         if (serviceIndex !== -1) {
-          user.cart[serviceIndex].quantity += item.quantity;
+          cart[serviceIndex].quantity += item.quantity;
         } else {
-          user.cart.push(item);
+          cart.push(item);
         }
       }
     });
+
+    user.cart = JSON.stringify(cart);
 
     await userRepo.updateUserCart(user);
 
     return res.status(200).json({
       status: true,
-      message: 'Product added to cart'
+      message: 'Products added to cart',
+      data: cart
     });
   } catch (error) {
     console.log('Error in addToCart: ', error);
@@ -241,10 +251,12 @@ const updateCartItems = async (req: Request, res: Response) => {
       });
     }
 
+    const cart = JSON.parse(user.cart) as CartItem[];
+
     cartItemsValidator.items.map((item) => {
       if (item.itemType === CartItemType.PRODUCT) {
         // find index of product in user cart
-        const productIndex = user.cart.findIndex(
+        const productIndex = cart.findIndex(
           (cartItem) =>
             cartItem.itemId === item.itemId &&
             cartItem.itemType === CartItemType.PRODUCT
@@ -252,30 +264,35 @@ const updateCartItems = async (req: Request, res: Response) => {
 
         // if product exists in cart
         if (productIndex !== -1) {
-          user.cart[productIndex].quantity = item.quantity;
+          if (item.quantity === 0) cart.splice(productIndex, 1);
+          else cart[productIndex].quantity = item.quantity;
         } else {
-          user.cart.push(item);
+          cart.push(item);
         }
       } else if (item.itemType === CartItemType.SERVICE) {
-        const serviceIndex = user.cart.findIndex(
+        const serviceIndex = cart.findIndex(
           (cartItem) =>
             cartItem.itemId === item.itemId &&
             cartItem.itemType === CartItemType.SERVICE
         );
 
         if (serviceIndex !== -1) {
-          user.cart[serviceIndex].quantity = item.quantity;
+          if (item.quantity === 0) cart.splice(serviceIndex, 1);
+          else cart[serviceIndex].quantity = item.quantity;
         } else {
-          user.cart.push(item);
+          cart.push(item);
         }
       }
     });
+
+    user.cart = JSON.stringify(cart);
 
     await userRepo.updateUserCart(user);
 
     return res.status(200).json({
       status: true,
-      message: 'Product added to cart'
+      message: 'Product added to cart',
+      data: cart
     });
   } catch (error) {
     console.log('Error in : updateCartItems', error);
@@ -316,22 +333,27 @@ const removeCartItems = async (req: Request, res: Response) => {
       });
     }
 
+    const cart = JSON.parse(user.cart) as CartItem[];
+
     cartItemsValidator.items.map((item) => {
-      const itemIndex = user.cart.findIndex(
+      const itemIndex = cart.findIndex(
         (cartItem) =>
           cartItem.itemId === item.itemId && cartItem.itemType === item.itemType
       );
 
       if (itemIndex !== -1) {
-        user.cart.splice(itemIndex, 1);
+        cart.splice(itemIndex, 1);
       }
     });
+
+    user.cart = JSON.stringify(cart);
 
     await userRepo.updateUserCart(user);
 
     return res.status(200).json({
       status: true,
-      message: 'Cart Items removed successfully'
+      message: 'Cart Items removed successfully',
+      data: cart
     });
   } catch (error) {
     console.log('Error in removeCartItems: ', error);

@@ -1,8 +1,16 @@
-import { IsEnum, IsNotEmpty, IsNumber, IsUUID } from 'class-validator';
+import {
+  IsEnum,
+  IsNotEmpty,
+  IsNumber,
+  IsPositive,
+  IsUUID,
+  Min
+} from 'class-validator';
 import {
   Column,
   CreateDateColumn,
   Entity,
+  MoreThan,
   OneToMany,
   PrimaryColumn,
   UpdateDateColumn
@@ -31,6 +39,7 @@ export class CartItem {
   @Column()
   @IsNumber()
   @IsNotEmpty()
+  @Min(0)
   quantity: number;
 }
 
@@ -52,10 +61,9 @@ export class User {
   isAdmin: boolean;
 
   @Column({
-    type: 'simple-array',
-    default: ''
+    default: '[]'
   })
-  cart: CartItem[];
+  cart: string;
 
   @CreateDateColumn({ type: 'timestamp' })
   createdAt: Date;
