@@ -28,10 +28,10 @@ app.get('/', (req: Request, res: Response) => {
   res.send('<h1>👋🏻 Hello!</h1>');
 });
 
-app.use('auth', authRoutes);
-app.use('user', userRoutes);
-app.use('product', productRoutes);
-app.use('service', serviceRoutes);
-app.use('cart', cartRoutes);
+app.use('/auth', authRoutes);
+app.use('/user', userRoutes);
+app.use('/product', productRoutes);
+app.use('/service', serviceRoutes);
+app.use('/cart', cartRoutes);
 
 app.listen(PORT, () => console.log(`Running on ${PORT} ⚡`));
