@@ -33,6 +33,18 @@ const signupUser = async (req: Request, res: Response) => {
       });
     }
 
+    // firebase getUserByEmail throws error if user does not exists
+    try {
+      const fbUserExists = await admin
+        .auth()
+        .getUserByEmail(converterObject.email);
+
+      // delete user from firebase if exists as user does not exists in database
+      if (fbUserExists) {
+        await admin.auth().deleteUser(fbUserExists.uid);
+      }
+    } catch (error) {}
+
     const fbUser = await admin.auth().createUser({
       email: converterObject.email,
       password: converterObject.password,
