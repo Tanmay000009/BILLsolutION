@@ -93,10 +93,29 @@ const addToCart = async (req: Request, res: Response) => {
       });
     }
 
+    // remove items with quantity 0
+    cartItemsValidator.items = cartItemsValidator.items.filter(
+      (item) => item.quantity > 0
+    );
+
+    // club items with same id and type
+    const items: CartItem[] = [];
+    cartItemsValidator.items.map((item) => {
+      const itemIndex = items.findIndex(
+        (i) => i.itemId === item.itemId && i.itemType === item.itemType
+      );
+
+      if (itemIndex !== -1) {
+        items[itemIndex].quantity += item.quantity;
+      } else {
+        items.push(item);
+      }
+    });
+
     const productIds: string[] = [];
     const serviceIds: string[] = [];
 
-    cartItemsValidator.items.map((item) => {
+    items.map((item) => {
       if (item.itemType === CartItemType.PRODUCT) productIds.push(item.itemId);
       else if (item.itemType === CartItemType.SERVICE)
         serviceIds.push(item.itemId);
@@ -120,7 +139,7 @@ const addToCart = async (req: Request, res: Response) => {
       });
     }
 
-    cartItemsValidator.items.map((item) => {
+    items.map((item) => {
       if (item.itemType === CartItemType.PRODUCT) {
         // find index of product in user cart
         const productIndex = user.cart.findIndex(
@@ -131,7 +150,7 @@ const addToCart = async (req: Request, res: Response) => {
 
         // if product exists in cart
         if (productIndex !== -1) {
-          user.cart[productIndex].quantity = item.quantity;
+          user.cart[productIndex].quantity += item.quantity;
         } else {
           user.cart.push(item);
         }
@@ -143,7 +162,7 @@ const addToCart = async (req: Request, res: Response) => {
         );
 
         if (serviceIndex !== -1) {
-          user.cart[serviceIndex].quantity = item.quantity;
+          user.cart[serviceIndex].quantity += item.quantity;
         } else {
           user.cart.push(item);
         }
