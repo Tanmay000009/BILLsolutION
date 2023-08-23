@@ -145,12 +145,14 @@ const login = async (req: Request, res: Response) => {
       converterObject.email,
       converterObject.password
     )
-      .then((userCredential) => {
-        const user = userCredential.user;
+      .then(async (userCredential) => {
+        const user = await userCredential.user.getIdToken();
         res.status(200).json({
           status: true,
           message: 'User logged in successfully',
-          data: user
+          data: {
+            token: user
+          }
         });
       })
       .catch((error) => {
@@ -173,7 +175,7 @@ const login = async (req: Request, res: Response) => {
 export const forgotPassword = async (req: Request, res: Response) => {
   try {
     const converterObject = plainToInstance(EmailValidationDto, {
-      email: req.body.email
+      email: req.params.email
     });
 
     const errors = await validate(converterObject);
@@ -188,8 +190,8 @@ export const forgotPassword = async (req: Request, res: Response) => {
     const user = await userRepo.getByEmail(converterObject.email);
 
     if (!user) {
-      return res.status(404).json({
-        status: false,
+      return res.status(200).json({
+        status: true,
         message: 'An link has been sent to your email.'
       });
     }
@@ -200,7 +202,7 @@ export const forgotPassword = async (req: Request, res: Response) => {
       .then(() => {
         res.status(200).json({
           status: true,
-          message: 'Password reset successfully'
+          message: 'An link has been sent to your email.'
         });
       })
       .catch((error) => {
