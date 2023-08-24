@@ -1,3 +1,4 @@
+import 'reflect-metadata';
 import {
   IsEnum,
   IsNotEmpty,
@@ -22,22 +23,14 @@ export enum CartItemType {
   SERVICE = 'SERVICE'
 }
 export class CartItem {
-  @Column({
-    type: 'uuid'
-  })
   @IsUUID()
   @IsNotEmpty()
   itemId: string;
 
-  @Column({
-    type: 'enum',
-    enum: CartItemType
-  })
   @IsEnum(CartItemType)
   @IsNotEmpty()
   itemType: CartItemType;
 
-  @Column()
   @IsNumber()
   @IsNotEmpty()
   @Min(0)
@@ -46,22 +39,22 @@ export class CartItem {
 
 @Entity()
 export class User {
-  @PrimaryColumn()
+  @PrimaryColumn('text')
   email: string;
 
-  @Column()
+  @Column('text')
   firstName: string;
 
-  @Column()
+  @Column('text')
   lastName: string;
 
-  @Column()
+  @Column('text')
   firebaseId: string;
 
-  @Column({ default: false })
+  @Column('bool', { default: false })
   isAdmin: boolean;
 
-  @Column({
+  @Column('text', {
     default: '[]'
   })
   cart: string;

@@ -1,11 +1,13 @@
 // order.entity.ts
-
+import 'reflect-metadata';
 import {
   Entity,
   Column,
   OneToMany,
   ManyToOne,
-  PrimaryGeneratedColumn
+  PrimaryGeneratedColumn,
+  CreateDateColumn,
+  UpdateDateColumn
 } from 'typeorm';
 import { User } from './User.model';
 import { OrderItem } from './OrderItem.model';
@@ -34,12 +36,14 @@ export class Order {
   @Column('float')
   totalTax: number;
 
-  @Column({
-    type: 'enum',
+  @Column('enum', {
     enum: OrderStatus
   })
   status: OrderStatus;
 
-  @Column({ default: () => 'CURRENT_TIMESTAMP' })
+  @CreateDateColumn({ type: 'timestamp' })
   createdAt: Date;
+
+  @UpdateDateColumn({ type: 'timestamp' })
+  updatedAt: Date;
 }

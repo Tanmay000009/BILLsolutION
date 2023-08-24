@@ -1,3 +1,4 @@
+import 'reflect-metadata';
 import {
   Column,
   CreateDateColumn,
@@ -11,16 +12,16 @@ export class Service {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column()
+  @Column('text')
   name: string;
 
-  @Column()
+  @Column('float')
   price: number;
 
-  @Column({ nullable: true })
+  @Column('text', { nullable: true })
   description: string;
 
-  @Column({ nullable: true })
+  @Column('text', { nullable: true })
   image: string;
 
   @CreateDateColumn({ type: 'timestamp' })

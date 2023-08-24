@@ -1,3 +1,4 @@
+import 'reflect-metadata';
 import {
   Column,
   CreateDateColumn,
@@ -15,7 +16,7 @@ export class OrderItem {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column()
+  @Column('int')
   quantity: number;
 
   @Column('float')
@@ -27,10 +28,10 @@ export class OrderItem {
   @Column('float')
   totalAmountWithoutTax: number;
 
-  @Column()
+  @Column('text')
   taxCategories: string;
 
-  @Column()
+  @Column('text')
   taxBreakdown: string;
 
   @ManyToOne(() => Product)
