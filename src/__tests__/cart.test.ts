@@ -6,6 +6,7 @@ import initServer from '../utils/server';
 import { Product } from '../models/Product.model';
 import { Service } from '../models/Service.model';
 import { ZERO_UUID } from '../utils/constants';
+import { ds } from '../utils/datasource';
 
 const app = initServer();
 
@@ -35,6 +36,10 @@ describe('Cart Routes', () => {
     const seedData = await seed();
     product = seedData.product;
     service = seedData.service;
+  });
+
+  afterAll(async () => {
+    ds.destroy();
   });
 
   describe('Get Cart', () => {
@@ -240,8 +245,6 @@ describe('Cart Routes', () => {
               }
             ]
           });
-
-        console.log(response);
 
         expect(response.status).toBe(404);
         expect(response.body.status).toBe(false);

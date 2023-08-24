@@ -3,6 +3,7 @@ import request from 'supertest';
 import initServer from '../utils/server';
 
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
+import { ds } from '../utils/datasource';
 
 const app = initServer();
 
@@ -27,6 +28,10 @@ describe('User Routes', () => {
     ).then(async (userCredential) => {
       userAccessToken = await userCredential.user.getIdToken();
     });
+  });
+
+  afterAll(async () => {
+    ds.destroy();
   });
 
   describe('Get User', () => {
