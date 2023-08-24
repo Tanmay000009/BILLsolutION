@@ -25,7 +25,8 @@ const signupUser = async (req: Request, res: Response) => {
     if (errors.length > 0) {
       return res.status(400).json({
         status: false,
-        message: errors
+        message: errors,
+        data: null
       });
     }
 
@@ -34,7 +35,8 @@ const signupUser = async (req: Request, res: Response) => {
     if (userExists) {
       return res.status(400).json({
         status: false,
-        message: 'User already exists'
+        message: 'User already exists',
+        data: null
       });
     }
 
@@ -67,7 +69,8 @@ const signupUser = async (req: Request, res: Response) => {
     console.error('Error in createUser: ', error);
     return res.status(500).json({
       status: false,
-      message: 'Internal server error'
+      message: 'Internal server error',
+      data: null
     });
   }
 };
@@ -77,14 +80,16 @@ const createAdmin = async (req: Request, res: Response) => {
     if (!req.user) {
       return res.status(401).json({
         status: false,
-        message: 'Unauthorized'
+        message: 'Unauthorized',
+        data: null
       });
     }
 
     if (req.user.isAdmin !== true) {
       return res.status(403).json({
         status: false,
-        message: 'Forbidden'
+        message: 'Forbidden',
+        data: null
       });
     }
 
@@ -95,7 +100,8 @@ const createAdmin = async (req: Request, res: Response) => {
     if (errors.length > 0) {
       return res.status(400).json({
         status: false,
-        message: errors
+        message: errors,
+        data: null
       });
     }
 
@@ -104,7 +110,8 @@ const createAdmin = async (req: Request, res: Response) => {
     if (userExists) {
       return res.status(400).json({
         status: false,
-        message: 'User already exists'
+        message: 'User already exists',
+        data: null
       });
     }
 
@@ -125,7 +132,8 @@ const createAdmin = async (req: Request, res: Response) => {
     console.error('Error in createAdmin: ', error);
     return res.status(500).json({
       status: false,
-      message: 'Internal Server Error'
+      message: 'Internal Server Error',
+      data: null
     });
   }
 };
@@ -139,7 +147,8 @@ const login = async (req: Request, res: Response) => {
     if (errors.length > 0) {
       return res.status(400).json({
         status: false,
-        message: errors
+        message: errors,
+        data: null
       });
     }
 
@@ -164,20 +173,23 @@ const login = async (req: Request, res: Response) => {
         if (error.code === 'auth/user-not-found') {
           return res.status(404).json({
             status: false,
-            message: 'User not found'
+            message: 'User not found',
+            data: null
           });
         }
 
         if (error.code === 'auth/wrong-password') {
           return res.status(400).json({
             status: false,
-            message: 'Invalid password'
+            message: 'Invalid password',
+            data: null
           });
         }
         console.log('Error in signInWithEmailAndPassword: ', error);
         res.status(500).json({
           status: false,
-          message: 'Internal Server Error'
+          message: 'Internal Server Error',
+          data: null
         });
       });
     return res;
@@ -185,7 +197,8 @@ const login = async (req: Request, res: Response) => {
     console.error('Error in login: ', error);
     return res.status(500).json({
       status: false,
-      message: 'Internal Server Error'
+      message: 'Internal Server Error',
+      data: null
     });
   }
 };
@@ -195,7 +208,8 @@ const updateUserPassword = async (req: Request, res: Response) => {
     if (!req.user) {
       return res.status(401).json({
         status: false,
-        message: 'Unauthorized'
+        message: 'Unauthorized',
+        data: null
       });
     }
 
@@ -206,7 +220,8 @@ const updateUserPassword = async (req: Request, res: Response) => {
     if (errors.length > 0) {
       return res.status(400).json({
         status: false,
-        message: errors
+        message: errors,
+        data: null
       });
     }
 
@@ -223,14 +238,16 @@ const updateUserPassword = async (req: Request, res: Response) => {
           .then(() => {
             res.status(200).json({
               status: true,
-              message: 'Password updated successfully'
+              message: 'Password updated successfully',
+              data: null
             });
           })
           .catch((error) => {
             console.log('Error in updatePassword: ', error);
             res.status(500).json({
               status: false,
-              message: 'Internal Server Error'
+              message: 'Internal Server Error',
+              data: null
             });
           });
       })
@@ -238,20 +255,23 @@ const updateUserPassword = async (req: Request, res: Response) => {
         if (error.code === 'auth/user-not-found') {
           return res.status(404).json({
             status: false,
-            message: 'User not found'
+            message: 'User not found',
+            data: null
           });
         }
 
         if (error.code === 'auth/wrong-password') {
           return res.status(400).json({
             status: false,
-            message: 'Invalid password'
+            message: 'Invalid password',
+            data: null
           });
         }
         console.log('Error in signInWithEmailAndPassword: ', error);
         res.status(500).json({
           status: false,
-          message: 'Internal Server Error'
+          message: 'Internal Server Error',
+          data: null
         });
       });
     return res;
@@ -259,7 +279,8 @@ const updateUserPassword = async (req: Request, res: Response) => {
     console.error('Error in updatePassword: ', error);
     return res.status(500).json({
       status: false,
-      message: 'Internal Server Error'
+      message: 'Internal Server Error',
+      data: null
     });
   }
 };
@@ -275,7 +296,8 @@ const forgotPassword = async (req: Request, res: Response) => {
     if (errors.length > 0) {
       return res.status(400).json({
         status: false,
-        message: errors
+        message: errors,
+        data: null
       });
     }
 
@@ -284,7 +306,8 @@ const forgotPassword = async (req: Request, res: Response) => {
     if (!user) {
       return res.status(200).json({
         status: true,
-        message: 'An link has been sent to your email.'
+        message: 'An link has been sent to your email.',
+        data: null
       });
     }
 
@@ -294,14 +317,16 @@ const forgotPassword = async (req: Request, res: Response) => {
       .then(() => {
         res.status(200).json({
           status: true,
-          message: 'An link has been sent to your email.'
+          message: 'An link has been sent to your email.',
+          data: null
         });
       })
       .catch((error) => {
         console.log('Error in sendPasswordResetEmail: ', error);
         res.status(500).json({
           status: false,
-          message: 'Internal Server Error'
+          message: 'Internal Server Error',
+          data: null
         });
       });
     return res;
@@ -309,7 +334,8 @@ const forgotPassword = async (req: Request, res: Response) => {
     console.error('Error in forgotPassword: ', error);
     return res.status(500).json({
       status: false,
-      message: 'Internal Server Error'
+      message: 'Internal Server Error',
+      data: null
     });
   }
 };

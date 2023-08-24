@@ -10,8 +10,9 @@ export const checkJWT = async (
   const token = req.headers['authorization'];
   if (!token) {
     return res.status(401).json({
-      auth: false,
-      message: 'No token provided'
+      status: false,
+      message: 'No token provided',
+      data: null
     });
   }
 
@@ -21,7 +22,8 @@ export const checkJWT = async (
     if (!dbUser) {
       return res.status(401).json({
         status: false,
-        message: 'Invalid token'
+        message: 'Invalid token',
+        data: null
       });
     }
 
@@ -30,7 +32,8 @@ export const checkJWT = async (
     if (!user) {
       return res.status(401).json({
         status: false,
-        message: 'User not found'
+        message: 'User not found',
+        data: null
       });
     }
 
@@ -38,7 +41,8 @@ export const checkJWT = async (
   } catch (error) {
     return res.status(401).json({
       status: false,
-      message: 'Invalid token'
+      message: 'Invalid token',
+      data: null
     });
   }
 

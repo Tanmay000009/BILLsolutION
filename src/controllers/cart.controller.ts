@@ -16,7 +16,8 @@ const getCart = async (req: Request, res: Response) => {
     if (!req.user) {
       return res.status(401).json({
         status: false,
-        message: 'Unauthorized'
+        message: 'Unauthorized',
+        data: null
       });
     }
 
@@ -53,13 +54,15 @@ const getCart = async (req: Request, res: Response) => {
 
     return res.status(200).json({
       status: true,
-      data: cartItems
+      data: cartItems,
+      message: 'Cart Items found'
     });
   } catch (error) {
     console.log('Error in getCart: ', error);
     return res.status(500).json({
       status: false,
-      message: 'Internal Server Error'
+      message: 'Internal Server Error',
+      data: null
     });
   }
 };
@@ -69,7 +72,8 @@ const addToCart = async (req: Request, res: Response) => {
     if (!req.user) {
       return res.status(401).json({
         status: false,
-        message: 'Unauthorized'
+        message: 'Unauthorized',
+        data: null
       });
     }
 
@@ -78,7 +82,8 @@ const addToCart = async (req: Request, res: Response) => {
     if (!user) {
       return res.status(404).json({
         status: false,
-        message: 'User not found'
+        message: 'User not found',
+        data: null
       });
     }
 
@@ -90,7 +95,8 @@ const addToCart = async (req: Request, res: Response) => {
       return res.status(400).json({
         status: false,
         message: 'Validation Error',
-        errors
+        errors,
+        data: null
       });
     }
 
@@ -127,7 +133,8 @@ const addToCart = async (req: Request, res: Response) => {
     if (products.length !== productIds.length) {
       return res.status(404).json({
         status: false,
-        message: 'One or More Product not found'
+        message: 'One or More Product not found',
+        data: null
       });
     }
 
@@ -136,7 +143,8 @@ const addToCart = async (req: Request, res: Response) => {
     if (services.length !== serviceIds.length) {
       return res.status(404).json({
         status: false,
-        message: 'One or More Service not found'
+        message: 'One or More Service not found',
+        data: null
       });
     }
     const cart = JSON.parse(user.cart) as CartItem[];
@@ -184,7 +192,8 @@ const addToCart = async (req: Request, res: Response) => {
     console.log('Error in addToCart: ', error);
     return res.status(500).json({
       status: false,
-      message: 'Internal Server Error'
+      message: 'Internal Server Error',
+      data: null
     });
   }
 };
@@ -194,7 +203,8 @@ const updateCartItems = async (req: Request, res: Response) => {
     if (!req.user) {
       return res.status(401).json({
         status: false,
-        message: 'Unauthorized'
+        message: 'Unauthorized',
+        data: null
       });
     }
 
@@ -203,7 +213,8 @@ const updateCartItems = async (req: Request, res: Response) => {
     if (!user) {
       return res.status(404).json({
         status: false,
-        message: 'User not found'
+        message: 'User not found',
+        data: null
       });
     }
 
@@ -215,7 +226,8 @@ const updateCartItems = async (req: Request, res: Response) => {
       return res.status(400).json({
         status: false,
         message: 'Validation Error',
-        errors
+        errors,
+        data: null
       });
     }
 
@@ -233,7 +245,8 @@ const updateCartItems = async (req: Request, res: Response) => {
     if (products.length !== productIds.length) {
       return res.status(404).json({
         status: false,
-        message: 'One or More Product not found'
+        message: 'One or More Product not found',
+        data: null
       });
     }
 
@@ -242,7 +255,8 @@ const updateCartItems = async (req: Request, res: Response) => {
     if (services.length !== serviceIds.length) {
       return res.status(404).json({
         status: false,
-        message: 'One or More Service not found'
+        message: 'One or More Service not found',
+        data: null
       });
     }
 
@@ -293,7 +307,8 @@ const updateCartItems = async (req: Request, res: Response) => {
     console.log('Error in : updateCartItems', error);
     return res.status(500).json({
       status: false,
-      message: 'Internal Server Error'
+      message: 'Internal Server Error',
+      data: null
     });
   }
 };
@@ -303,7 +318,8 @@ const removeCartItems = async (req: Request, res: Response) => {
     if (!req.user) {
       return res.status(401).json({
         status: false,
-        message: 'Unauthorized'
+        message: 'Unauthorized',
+        data: null
       });
     }
 
@@ -312,7 +328,8 @@ const removeCartItems = async (req: Request, res: Response) => {
     if (!user) {
       return res.status(404).json({
         status: false,
-        message: 'User not found'
+        message: 'User not found',
+        data: null
       });
     }
 
@@ -324,7 +341,8 @@ const removeCartItems = async (req: Request, res: Response) => {
       return res.status(400).json({
         status: false,
         message: 'Validation Error',
-        errors
+        errors,
+        data: null
       });
     }
 
@@ -354,7 +372,8 @@ const removeCartItems = async (req: Request, res: Response) => {
     console.log('Error in removeCartItems: ', error);
     return res.status(500).json({
       status: false,
-      message: 'Internal Server Error'
+      message: 'Internal Server Error',
+      data: null
     });
   }
 };
@@ -364,7 +383,8 @@ const clearCart = async (req: Request, res: Response) => {
     if (!req.user) {
       return res.status(401).json({
         status: false,
-        message: 'Unauthorized'
+        message: 'Unauthorized',
+        data: null
       });
     }
 
@@ -373,7 +393,8 @@ const clearCart = async (req: Request, res: Response) => {
     if (!user) {
       return res.status(404).json({
         status: false,
-        message: 'User not found'
+        message: 'User not found',
+        data: null
       });
     }
 
@@ -390,7 +411,8 @@ const clearCart = async (req: Request, res: Response) => {
     console.log('Error in clearCart: ', error);
     return res.status(500).json({
       status: false,
-      message: 'Internal Server Error'
+      message: 'Internal Server Error',
+      data: null
     });
   }
 };

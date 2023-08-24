@@ -19,7 +19,8 @@ const getOrders = async (req: Request, res: Response) => {
     if (!req.user) {
       return res.status(401).json({
         status: false,
-        message: 'Unauthorized'
+        message: 'Unauthorized',
+        data: null
       });
     }
 
@@ -34,13 +35,15 @@ const getOrders = async (req: Request, res: Response) => {
 
     return res.status(200).json({
       status: true,
-      data: orders
+      data: orders,
+      message: 'Orders found'
     });
   } catch (error) {
     console.error('Error in getOrders: ', error);
     return res.status(500).json({
       status: false,
-      message: 'Internal Server Error'
+      message: 'Internal Server Error',
+      data: null
     });
   }
 };
@@ -50,7 +53,8 @@ const adminGetOrders = async (req: Request, res: Response) => {
     if (!req.user) {
       return res.status(401).json({
         status: false,
-        message: 'Unauthorized'
+        message: 'Unauthorized',
+        data: null
       });
     }
 
@@ -61,13 +65,15 @@ const adminGetOrders = async (req: Request, res: Response) => {
 
     return res.status(200).json({
       status: true,
-      data: orders
+      data: orders,
+      message: 'Orders found'
     });
   } catch (error) {
     console.error('Error in adminGetOrders: ', error);
     return res.status(500).json({
       status: false,
-      message: 'Internal Server Error'
+      message: 'Internal Server Error',
+      data: null
     });
   }
 };
@@ -77,7 +83,8 @@ const generateInvoice = async (req: Request, res: Response) => {
     if (!req.user) {
       return res.status(401).json({
         status: false,
-        message: 'Unauthorized'
+        message: 'Unauthorized',
+        data: null
       });
     }
 
@@ -86,7 +93,8 @@ const generateInvoice = async (req: Request, res: Response) => {
     if (!user) {
       return res.status(404).json({
         status: false,
-        message: 'User not found'
+        message: 'User not found',
+        data: null
       });
     }
 
@@ -106,7 +114,8 @@ const generateInvoice = async (req: Request, res: Response) => {
     if (products.length !== productIds.length) {
       return res.status(404).json({
         status: false,
-        message: 'One or More Product not found'
+        message: 'One or More Product not found',
+        data: null
       });
     }
 
@@ -115,7 +124,8 @@ const generateInvoice = async (req: Request, res: Response) => {
     if (services.length !== serviceIds.length) {
       return res.status(404).json({
         status: false,
-        message: 'One or More Service not found'
+        message: 'One or More Service not found',
+        data: null
       });
     }
 
@@ -170,7 +180,8 @@ const generateInvoice = async (req: Request, res: Response) => {
     console.error('Error in generateInvoice: ', error);
     return res.status(500).json({
       status: false,
-      message: 'Internal Server Error'
+      message: 'Internal Server Error',
+      data: null
     });
   }
 };
@@ -180,7 +191,8 @@ const createOrder = async (req: Request, res: Response) => {
     if (!req.user) {
       return res.status(401).json({
         status: false,
-        message: 'Unauthorized'
+        message: 'Unauthorized',
+        data: null
       });
     }
 
@@ -189,7 +201,8 @@ const createOrder = async (req: Request, res: Response) => {
     if (!user) {
       return res.status(404).json({
         status: false,
-        message: 'User not found'
+        message: 'User not found',
+        data: null
       });
     }
 
@@ -209,7 +222,8 @@ const createOrder = async (req: Request, res: Response) => {
     if (products.length !== productIds.length) {
       return res.status(404).json({
         status: false,
-        message: 'One or More Product not found'
+        message: 'One or More Product not found',
+        data: null
       });
     }
 
@@ -218,7 +232,8 @@ const createOrder = async (req: Request, res: Response) => {
     if (services.length !== serviceIds.length) {
       return res.status(404).json({
         status: false,
-        message: 'One or More Service not found'
+        message: 'One or More Service not found',
+        data: null
       });
     }
 
@@ -310,7 +325,8 @@ const createOrder = async (req: Request, res: Response) => {
     console.error('Error in processOrder: ', error);
     return res.status(500).json({
       status: false,
-      message: 'Internal Server Error'
+      message: 'Internal Server Error',
+      data: null
     });
   }
 };
@@ -325,14 +341,16 @@ const processOrder = async (req: Request, res: Response) => {
       return res.status(400).json({
         status: false,
         message: 'Validation Error',
-        errors
+        errors,
+        data: null
       });
     }
 
     if (!req.user) {
       return res.status(401).json({
         status: false,
-        message: 'Unauthorized'
+        message: 'Unauthorized',
+        data: null
       });
     }
 
@@ -341,14 +359,16 @@ const processOrder = async (req: Request, res: Response) => {
     if (!user) {
       return res.status(404).json({
         status: false,
-        message: 'User not found'
+        message: 'User not found',
+        data: null
       });
     }
 
     if (!user.isAdmin) {
       return res.status(403).json({
         status: false,
-        message: 'Forbidden'
+        message: 'Forbidden',
+        data: null
       });
     }
 
@@ -357,21 +377,24 @@ const processOrder = async (req: Request, res: Response) => {
     if (!order) {
       return res.status(404).json({
         status: false,
-        message: 'Order not found'
+        message: 'Order not found',
+        data: null
       });
     }
 
     if (order.status === OrderStatus.CANCELLED) {
       return res.status(400).json({
         status: false,
-        message: 'Order is Cancelled'
+        message: 'Order is Cancelled',
+        data: null
       });
     }
 
     if (order.status !== OrderStatus.PENDING) {
       return res.status(400).json({
         status: false,
-        message: 'Order already processed'
+        message: 'Order already processed',
+        data: null
       });
     }
 
@@ -388,7 +411,8 @@ const processOrder = async (req: Request, res: Response) => {
     console.error('Error in confirmOrder: ', error);
     return res.status(500).json({
       status: false,
-      message: 'Internal Server Error'
+      message: 'Internal Server Error',
+      data: null
     });
   }
 };
@@ -406,14 +430,16 @@ const cancelOrder = async (req: Request, res: Response) => {
       return res.status(400).json({
         status: false,
         message: 'Validation Error',
-        errors
+        errors,
+        data: null
       });
     }
 
     if (!req.user) {
       return res.status(401).json({
         status: false,
-        message: 'Unauthorized'
+        message: 'Unauthorized',
+        data: null
       });
     }
 
@@ -422,7 +448,8 @@ const cancelOrder = async (req: Request, res: Response) => {
     if (!user) {
       return res.status(404).json({
         status: false,
-        message: 'User not found'
+        message: 'User not found',
+        data: null
       });
     }
 
@@ -431,28 +458,32 @@ const cancelOrder = async (req: Request, res: Response) => {
     if (!order) {
       return res.status(404).json({
         status: false,
-        message: 'Order not found'
+        message: 'Order not found',
+        data: null
       });
     }
 
     if (order.status === OrderStatus.CANCELLED) {
       return res.status(400).json({
         status: false,
-        message: 'Order is already Cancelled'
+        message: 'Order is already Cancelled',
+        data: null
       });
     }
 
     if (order.status !== OrderStatus.PENDING) {
       return res.status(400).json({
         status: false,
-        message: 'Order already processed'
+        message: 'Order already processed',
+        data: null
       });
     }
 
     if (order.user.email !== user.email) {
       return res.status(403).json({
         status: false,
-        message: 'Forbidden'
+        message: 'Forbidden',
+        data: null
       });
     }
 
@@ -469,7 +500,8 @@ const cancelOrder = async (req: Request, res: Response) => {
     console.error('Error in cancelOrder: ', error);
     return res.status(500).json({
       status: false,
-      message: 'Internal Server Error'
+      message: 'Internal Server Error',
+      data: null
     });
   }
 };

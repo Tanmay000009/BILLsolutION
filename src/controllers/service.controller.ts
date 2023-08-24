@@ -25,7 +25,8 @@ const getAll = async (req: Request, res: Response) => {
     console.log('Error in getAll: ', error);
     return res.status(500).json({
       status: false,
-      message: 'Internal Server Error'
+      message: 'Internal Server Error',
+      data: null
     });
   }
 };
@@ -41,7 +42,8 @@ const getById = async (req: Request, res: Response) => {
       return res.status(400).json({
         status: false,
         message: 'Validation Error',
-        errors
+        errors,
+        data: null
       });
     }
 
@@ -50,7 +52,8 @@ const getById = async (req: Request, res: Response) => {
     if (!service) {
       return res.status(404).json({
         status: false,
-        message: 'service not found'
+        message: 'service not found',
+        data: null
       });
     }
 
@@ -63,7 +66,8 @@ const getById = async (req: Request, res: Response) => {
     console.log('Error in getById: ', error);
     return res.status(500).json({
       status: false,
-      message: 'Internal Server Error'
+      message: 'Internal Server Error',
+      data: null
     });
   }
 };
@@ -73,14 +77,16 @@ const createService = async (req: Request, res: Response) => {
     if (!req.user) {
       return res.status(401).json({
         status: false,
-        message: 'Unauthorized'
+        message: 'Unauthorized',
+        data: null
       });
     }
 
     if (req.user.isAdmin !== true) {
       return res.status(403).json({
         status: false,
-        message: 'Forbidden'
+        message: 'Forbidden',
+        data: null
       });
     }
 
@@ -91,7 +97,8 @@ const createService = async (req: Request, res: Response) => {
       return res.status(400).json({
         status: false,
         message: 'Validation Error',
-        errors
+        errors,
+        data: null
       });
     }
 
@@ -106,7 +113,8 @@ const createService = async (req: Request, res: Response) => {
     console.log('Error in createService: ', error);
     return res.status(500).json({
       status: false,
-      message: 'Internal Server Error'
+      message: 'Internal Server Error',
+      data: null
     });
   }
 };
@@ -116,14 +124,16 @@ const updateService = async (req: Request, res: Response) => {
     if (!req.user) {
       return res.status(401).json({
         status: false,
-        message: 'Unauthorized'
+        message: 'Unauthorized',
+        data: null
       });
     }
 
     if (req.user.isAdmin !== true) {
       return res.status(403).json({
         status: false,
-        message: 'Forbidden'
+        message: 'Forbidden',
+        data: null
       });
     }
 
@@ -137,7 +147,8 @@ const updateService = async (req: Request, res: Response) => {
       return res.status(400).json({
         status: false,
         message: 'Validation Error',
-        errors
+        errors,
+        data: null
       });
     }
 
@@ -146,7 +157,8 @@ const updateService = async (req: Request, res: Response) => {
     if (!service) {
       return res.status(404).json({
         status: false,
-        message: 'service not found'
+        message: 'service not found',
+        data: null
       });
     }
 
@@ -158,7 +170,8 @@ const updateService = async (req: Request, res: Response) => {
       return res.status(400).json({
         status: false,
         message: 'Validation Error',
-        errors: serviceValidationErrors
+        errors: serviceValidationErrors,
+        data: null
       });
     }
 
@@ -176,7 +189,8 @@ const updateService = async (req: Request, res: Response) => {
     console.log('Error in updateService: ', error);
     return res.status(500).json({
       status: false,
-      message: 'Internal Server Error'
+      message: 'Internal Server Error',
+      data: null
     });
   }
 };
@@ -186,14 +200,16 @@ const deleteService = async (req: Request, res: Response) => {
     if (!req.user) {
       return res.status(401).json({
         status: false,
-        message: 'Unauthorized'
+        message: 'Unauthorized',
+        data: null
       });
     }
 
     if (req.user.isAdmin !== true) {
       return res.status(403).json({
         status: false,
-        message: 'Forbidden'
+        message: 'Forbidden',
+        data: null
       });
     }
 
@@ -207,7 +223,8 @@ const deleteService = async (req: Request, res: Response) => {
       return res.status(400).json({
         status: false,
         message: 'Validation Error',
-        errors
+        errors,
+        data: null
       });
     }
 
@@ -216,7 +233,8 @@ const deleteService = async (req: Request, res: Response) => {
     if (!service) {
       return res.status(404).json({
         status: false,
-        message: 'service not found'
+        message: 'service not found',
+        data: null
       });
     }
 
@@ -224,13 +242,15 @@ const deleteService = async (req: Request, res: Response) => {
 
     return res.status(200).json({
       status: true,
-      message: 'service deleted'
+      message: 'service deleted',
+      data: null
     });
   } catch (error) {
     console.log('Error in deleteService: ', error);
     return res.status(500).json({
       status: false,
-      message: 'Internal Server Error'
+      message: 'Internal Server Error',
+      data: null
     });
   }
 };
