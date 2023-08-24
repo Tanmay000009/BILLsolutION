@@ -185,7 +185,7 @@ const addToCart = async (req: Request, res: Response) => {
 
     return res.status(200).json({
       status: true,
-      message: 'Products added to cart',
+      message: 'Items added to cart',
       data: cart
     });
   } catch (error) {
@@ -227,6 +227,20 @@ const updateCartItems = async (req: Request, res: Response) => {
         status: false,
         message: 'Validation Error',
         errors,
+        data: null
+      });
+    }
+
+    // throw error if duplicate items are present
+    const duplicateItems = cartItemsValidator.items.filter(
+      (item, index, self) =>
+        index !== self.findIndex((i) => i.itemId === item.itemId)
+    );
+
+    if (duplicateItems.length > 0) {
+      return res.status(400).json({
+        status: false,
+        message: 'Duplicate items are not allowed',
         data: null
       });
     }

@@ -6,12 +6,12 @@ import {
   IsUUID,
   ValidateNested
 } from 'class-validator';
-import { CartItem, CartItemType } from '../models/User.model';
+import { AddCartItem, CartItem, CartItemType } from '../models/User.model';
 import { Type } from 'class-transformer';
 
 export class AddToCartDto {
   @ValidateNested({ each: true })
-  @Type(() => CartItem)
+  @Type(() => AddCartItem)
   @IsArray()
   @IsNotEmpty()
   items: CartItem[];

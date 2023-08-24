@@ -37,6 +37,21 @@ export class CartItem {
   quantity: number;
 }
 
+export class AddCartItem {
+  @IsUUID()
+  @IsNotEmpty()
+  itemId: string;
+
+  @IsEnum(CartItemType)
+  @IsNotEmpty()
+  itemType: CartItemType;
+
+  @IsNumber()
+  @IsNotEmpty()
+  @IsPositive()
+  quantity: number;
+}
+
 @Entity()
 export class User {
   @PrimaryColumn('text')
