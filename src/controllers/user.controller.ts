@@ -113,7 +113,7 @@ const makeAdmin = async (req: Request, res: Response) => {
     }
 
     const converterObject = plainToInstance(EmailValidationDto, {
-      email: req.params.email
+      email: req.query.email
     });
     const errors = await validate(converterObject);
 
@@ -161,8 +161,78 @@ const makeAdmin = async (req: Request, res: Response) => {
   }
 };
 
+const makeNormalUser = async (req: Request, res: Response) => {
+  try {
+    if (!req.user) {
+      return res.status(401).json({
+        status: false,
+        message: 'Unauthorized',
+        data: null
+      });
+    }
+
+    if (req.user.isAdmin !== true) {
+      return res.status(403).json({
+        status: false,
+        message: 'Forbidden',
+        data: null
+      });
+    }
+
+    const converterObject = plainToInstance(EmailValidationDto, {
+      email: req.query.email
+    });
+
+    const errors = await validate(converterObject);
+
+    if (errors.length > 0) {
+      return res.status(400).json({
+        status: false,
+        message: errors,
+        data: null
+      });
+    }
+
+    const user = await userRepo.getByEmail(converterObject.email);
+
+    if (!user) {
+      return res.status(404).json({
+        status: false,
+        message: 'User not found',
+        data: null
+      });
+    }
+
+    if (user.isAdmin === false) {
+      return res.status(400).json({
+        status: false,
+        message: 'User is not an Admin User',
+        data: null
+      });
+    }
+
+    user.isAdmin = false;
+
+    await userRepo.updateUser(user);
+
+    return res.status(200).json({
+      status: true,
+      message: 'Admin Role removed successfully',
+      data: user
+    });
+  } catch (error) {
+    console.error('Error in makeNormalUser: ', error);
+    return res.status(500).json({
+      status: false,
+      message: 'Internal Server Error',
+      data: null
+    });
+  }
+};
+
 export const userController = {
   getMe,
   updateUser,
-  makeAdmin
+  makeAdmin,
+  makeNormalUser
 };
