@@ -40,6 +40,8 @@ const signupUser = async (req: Request, res: Response) => {
       });
     }
 
+    converterObject.email = converterObject.email.toLowerCase();
+
     // firebase getUserByEmail throws error if user does not exists
     try {
       const fbUserExists = await admin
@@ -104,6 +106,8 @@ const createAdmin = async (req: Request, res: Response) => {
         data: null
       });
     }
+
+    converterObject.email = converterObject.email.toLowerCase();
 
     const userExists = await userRepo.getByEmail(converterObject.email);
 

@@ -125,6 +125,8 @@ const makeAdmin = async (req: Request, res: Response) => {
       });
     }
 
+    converterObject.email = converterObject.email.toLowerCase();
+
     const user = await userRepo.getByEmail(converterObject.email);
 
     if (!user) {
