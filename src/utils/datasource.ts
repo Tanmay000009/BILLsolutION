@@ -21,6 +21,6 @@ export const ds = new DataSource({
   password: DB_PASSWORD,
   database: DATABASE,
   entities: [User, Product, Service, Order, OrderItem],
-  logging: true,
-  synchronize: true
+  logging: false,
+  synchronize: false
 });
