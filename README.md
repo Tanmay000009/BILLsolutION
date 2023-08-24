@@ -166,7 +166,7 @@ npm run test
 
 ### Good to haves
 
-- [ ] Additional API for admin to see all the orders.
+- [x] Additional API for admin to see all the orders.
 - [x] Appropriate test cases to simulate practical scenarios that you would want to test the system for.
 
 <p align="right">(<a href="https://github.com/Tanmay000009/BILLsolutION#billsolution">back to top</a>)</p>
