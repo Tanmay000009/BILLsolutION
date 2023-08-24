@@ -39,6 +39,7 @@ describe('Cart Routes', () => {
   });
 
   afterAll(async () => {
+    await clearTestSeed(product!.id, service!.id);
     ds.destroy();
   });
 
@@ -502,4 +503,9 @@ const seed = async () => {
     product: p,
     service: s
   };
+};
+
+const clearTestSeed = async (productId: string, serviceId: string) => {
+  await productRepo.deleteProduct(productId);
+  await serviceRepo.deleteService(serviceId);
 };
