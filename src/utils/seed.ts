@@ -1,3 +1,4 @@
+import { SignupUserDto } from '../dtos/auth.dto';
 import { productRepo } from '../repos/product.repo';
 import { serviceRepo } from '../repos/service.repo';
 import { userRepo } from '../repos/user.repo';
@@ -47,6 +48,20 @@ const seedUser = {
   password: 'Billion@2023'
 };
 
+const testUser = {
+  email: 'testUser@billion.com',
+  firstName: 'testUser',
+  lastName: 'testUser',
+  password: 'Billion@2023'
+};
+
+const testAdmin = {
+  email: 'testAdmin@billion.com',
+  firstName: 'testAdmin',
+  lastName: 'testAdmin',
+  password: 'Billion@2023'
+};
+
 export const seeder = async () => {
   await initFirebaseAdmin();
 
@@ -54,11 +69,17 @@ export const seeder = async () => {
     console.log('Database connected');
   });
 
-  const seedadmin = await seedAdmin();
+  const seedusers = await seedUserUtil(seedUser);
 
-  if (seedadmin) {
+  if (seedusers) {
+    await seedUserUtil(testUser);
+    await seedUserUtil(testAdmin);
     await seedProducts();
     await seedServices();
+    console.log('Admin user created successfully');
+    console.log(seedUser);
+    console.log('Test user created successfully');
+    console.log(testUser);
   }
 
   console.log('Seeding completed');
@@ -68,8 +89,8 @@ export const seeder = async () => {
 
 seeder();
 
-const seedAdmin = async () => {
-  const userExists = await userRepo.getByEmail(seedUser.email);
+const seedUserUtil = async (seeduser: SignupUserDto) => {
+  const userExists = await userRepo.getByEmail(seeduser.email);
 
   if (userExists) {
     console.log('Data already seeded');
@@ -79,7 +100,7 @@ const seedAdmin = async () => {
 
   // firebase getUserByEmail throws error if user does not exists
   try {
-    const fbUserExists = await admin.auth().getUserByEmail(seedUser.email);
+    const fbUserExists = await admin.auth().getUserByEmail(seeduser.email);
 
     // delete user from firebase if exists as user does not exists in database
     if (fbUserExists) {
@@ -88,15 +109,12 @@ const seedAdmin = async () => {
   } catch (error) {}
 
   const fbUser = await admin.auth().createUser({
-    email: seedUser.email,
-    password: seedUser.password,
-    displayName: seedUser.firstName + ' ' + seedUser.lastName
+    email: seeduser.email,
+    password: seeduser.password,
+    displayName: seeduser.firstName + ' ' + seeduser.lastName
   });
 
-  const user = await userRepo.createUser(seedUser, fbUser.uid);
-
-  console.log('Admin user created successfully');
-  console.log(seedUser);
+  const user = await userRepo.createUser(seeduser, fbUser.uid);
 
   return true;
 };
