@@ -101,6 +101,7 @@ BILLION is a sophisticated billing system crafted with Node.js and powered by Po
 
 - Get User Details. `GET /user` `Access: User/Admin`
 - Update User Details. `PUT /user` `Access: User/Admin`
+- Make User Admin. `PUT /user/:email/admin` `Access: Admin`
 
 <p align="right">(<a href="https://github.com/Tanmay000009/BILLsolutION#billsolution">back to top</a>)</p>
 
