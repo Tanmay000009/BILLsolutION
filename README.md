@@ -33,7 +33,7 @@ BILLION is a sophisticated billing system crafted with Node.js and powered by Po
 - [ ] Additional API for admin to see all the orders.
 - [ ] Appropriate test cases to simulate practical scenarios that you would want to test the system for.
 
-<p align="right">(<a href="#BILLsolutION">back to top</a>)</p>
+<p align="right">(<a href="https://github.com/Tanmay000009/BILLsolutION#billsolution">back to top</a>)</p>
 
 ## Quick Answers to Key Questions
 
@@ -52,7 +52,7 @@ BILLION is a sophisticated billing system crafted with Node.js and powered by Po
 4. Why Are Firebase Credentials Publicly Available in the Repo?
    > Firebase credentials are intentionally shared for ease of testing, allowing users to quickly evaluate BILLION's functionality. However, it's essential to follow secure practices for production use to ensure data protection.
 
-<p align="right">(<a href="#BILLsolutION">back to top</a>)</p>
+<p align="right">(<a href="https://github.com/Tanmay000009/BILLsolutION#billsolution">back to top</a>)</p>
 
 ## Module Description
 
@@ -102,7 +102,7 @@ BILLION is a sophisticated billing system crafted with Node.js and powered by Po
 - Get User Details. `GET /user` `Access: User/Admin`
 - Update User Details. `PUT /user` `Access: User/Admin`
 
-<p align="right">(<a href="#BILLsolutION">back to top</a>)</p>
+<p align="right">(<a href="https://github.com/Tanmay000009/BILLsolutION#billsolution">back to top</a>)</p>
 
 ## Contact
 
