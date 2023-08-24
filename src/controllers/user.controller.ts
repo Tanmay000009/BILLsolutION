@@ -139,7 +139,7 @@ const makeAdmin = async (req: Request, res: Response) => {
       return res.status(400).json({
         status: false,
         message: 'User is already a Admin',
-        data: user
+        data: null
       });
     }
 
