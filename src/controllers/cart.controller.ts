@@ -314,7 +314,7 @@ const updateCartItems = async (req: Request, res: Response) => {
 
     return res.status(200).json({
       status: true,
-      message: 'Product added to cart',
+      message: 'Cart Items updated',
       data: cart
     });
   } catch (error) {
