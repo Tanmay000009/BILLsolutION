@@ -6,9 +6,14 @@ import admin from 'firebase-admin';
 import {
   getAuth,
   sendPasswordResetEmail,
-  signInWithEmailAndPassword
+  signInWithEmailAndPassword,
+  updatePassword
 } from 'firebase/auth';
-import { SigninUserDto, SignupUserDto } from '../dtos/auth.dto';
+import {
+  SigninUserDto,
+  SignupUserDto,
+  UpdatePasswordDto
+} from '../dtos/auth.dto';
 import { EmailValidationDto } from '../dtos/common.dto';
 
 const signupUser = async (req: Request, res: Response) => {
@@ -156,6 +161,19 @@ const login = async (req: Request, res: Response) => {
         });
       })
       .catch((error) => {
+        if (error.code === 'auth/user-not-found') {
+          return res.status(404).json({
+            status: false,
+            message: 'User not found'
+          });
+        }
+
+        if (error.code === 'auth/wrong-password') {
+          return res.status(400).json({
+            status: false,
+            message: 'Invalid password'
+          });
+        }
         console.log('Error in signInWithEmailAndPassword: ', error);
         res.status(500).json({
           status: false,
@@ -172,7 +190,81 @@ const login = async (req: Request, res: Response) => {
   }
 };
 
-export const forgotPassword = async (req: Request, res: Response) => {
+const updateUserPassword = async (req: Request, res: Response) => {
+  try {
+    if (!req.user) {
+      return res.status(401).json({
+        status: false,
+        message: 'Unauthorized'
+      });
+    }
+
+    const converterObject = plainToInstance(UpdatePasswordDto, req.body);
+
+    const errors = await validate(converterObject);
+
+    if (errors.length > 0) {
+      return res.status(400).json({
+        status: false,
+        message: errors
+      });
+    }
+
+    const auth = getAuth();
+
+    await signInWithEmailAndPassword(
+      auth,
+      req.user.email,
+      converterObject.currentPassword
+    )
+      .then(async (userCredential) => {
+        const user = userCredential.user;
+        await updatePassword(user, converterObject.newPassword)
+          .then(() => {
+            res.status(200).json({
+              status: true,
+              message: 'Password updated successfully'
+            });
+          })
+          .catch((error) => {
+            console.log('Error in updatePassword: ', error);
+            res.status(500).json({
+              status: false,
+              message: 'Internal Server Error'
+            });
+          });
+      })
+      .catch((error) => {
+        if (error.code === 'auth/user-not-found') {
+          return res.status(404).json({
+            status: false,
+            message: 'User not found'
+          });
+        }
+
+        if (error.code === 'auth/wrong-password') {
+          return res.status(400).json({
+            status: false,
+            message: 'Invalid password'
+          });
+        }
+        console.log('Error in signInWithEmailAndPassword: ', error);
+        res.status(500).json({
+          status: false,
+          message: 'Internal Server Error'
+        });
+      });
+    return res;
+  } catch (error) {
+    console.error('Error in updatePassword: ', error);
+    return res.status(500).json({
+      status: false,
+      message: 'Internal Server Error'
+    });
+  }
+};
+
+const forgotPassword = async (req: Request, res: Response) => {
   try {
     const converterObject = plainToInstance(EmailValidationDto, {
       email: req.params.email
@@ -226,5 +318,6 @@ export const authController = {
   signupUser,
   createAdmin,
   login,
-  forgotPassword
+  forgotPassword,
+  updateUserPassword
 };

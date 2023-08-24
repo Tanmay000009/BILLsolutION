@@ -31,3 +31,14 @@ export class SigninUserDto {
   @IsString()
   password: string;
 }
+
+export class UpdatePasswordDto {
+  @IsNotEmpty()
+  @IsString()
+  currentPassword: string;
+
+  @IsNotEmpty()
+  @IsString()
+  @Validate(StrongPasswordValidator)
+  newPassword: string;
+}
