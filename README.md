@@ -13,6 +13,7 @@ BILLION is a sophisticated billing system crafted with Node.js and powered by Po
 ![Postgres](https://img.shields.io/badge/postgres-%23316192.svg?style=for-the-badge&logo=postgresql&logoColor=white)
 ![TypeORM](https://img.shields.io/badge/TypeORM-E83422?style=for-the-badge&logo=typeorm&logoColor=white)
 ![Firebase](https://img.shields.io/badge/Firebase-039BE5?style=for-the-badge&logo=Firebase&logoColor=white)
+![Docker](https://img.shields.io/badge/Docker-2CA5E0?style=for-the-badge&logo=Docker&logoColor=white)
 ![Postman](https://img.shields.io/badge/Postman-FF6C37?style=for-the-badge&logo=postman&logoColor=white)
 ![Jest](https://img.shields.io/badge/Jest-C21325?style=for-the-badge&logo=jest&logoColor=white)
 ![Babel](https://img.shields.io/badge/Babel-F9DC3E?style=for-the-badge&logo=Babel&logoColor=black)
@@ -53,6 +54,7 @@ password: Billion@123
 - [PostgreSQL](https://www.postgresql.org/download/) (Local/Cloud)
 - [Postman](https://www.postman.com/downloads/) (Optional)
 - [Firebase](https://firebase.google.com/)
+- [Docker](https://www.docker.com/) (Optional)
 
 ### Installation
 
@@ -62,13 +64,15 @@ password: Billion@123
    git clone https://github.com/Tanmay000009/BILLsolutION
    ```
 
-2. Install NPM packages
+2. Setup `.env` with `sample.env` as refrence
+
+### Running Server Locally
+
+1. Install NPM packages
 
    ```sh
    npm install
    ```
-
-3. Setup `.env` with `sample.env` as refrence
 
 ### Commands
 
@@ -77,6 +81,76 @@ password: Billion@123
 - `npm run start` - Start the production server.
 - `npm run test` - Run tests.
 - `npm run seed` - Seed the database.
+
+- The application will be accessible at `http://localhost:3000`.
+
+### Using Docker Compose
+
+1. Make sure you have Docker and Docker Compose installed on your system.
+2. Clone the repository.
+3. Navigate to the root directory of the project.
+4. Run the following command to build and start the application in Docker containers:
+
+```
+docker-compose up -d
+```
+
+OR
+
+```
+./compose.sh
+```
+
+> If you are facing permission issues, run the following command:
+
+```
+chmod +x compose.sh
+```
+
+> The application will be accessible at http://localhost:3000.
+
+### Using Docker Image
+
+1. Make sure you have Docker installed on your system.
+2. Clone the repository.
+3. Navigate to the root directory of the project.
+4. Take reference from the `.env.example` file to create the environment file `.env` and update the environment variables as needed.
+5. Run the following command to build the Docker image:
+
+```
+./run.sh
+```
+
+OR
+
+> Build the Docker image using the current directory as the build context
+
+```
+docker build -t <image-name>:<tag> .
+```
+
+> Run the Docker container interactively, mapping the required port (3000 in this case)
+> and using the .env file from the host machine as a volume inside the container
+
+```
+docker run -it -p 3000:3000 --env-file .env <image-name>:<tag>
+```
+
+6. If you are facing permission issues, run the following command:
+
+```
+chmod +x run.sh
+```
+
+7. The application will be accessible at http://localhost:3000.
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+### Testing
+
+```sh
+npm run test
+```
 
 ## Checklist
 
