@@ -6,7 +6,7 @@ BILLION is a sophisticated billing system crafted with Node.js and powered by Po
 
 - [Postman collection](https://www.postman.com/tanmay000009/workspace/billsolution)
 
-### Built With
+## Built With
 
 ![NodeJS](https://img.shields.io/badge/node.js-6DA55F?style=for-the-badge&logo=node.js&logoColor=white)
 ![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white)
@@ -14,7 +14,69 @@ BILLION is a sophisticated billing system crafted with Node.js and powered by Po
 ![TypeORM](https://img.shields.io/badge/TypeORM-E83422?style=for-the-badge&logo=typeorm&logoColor=white)
 ![Firebase](https://img.shields.io/badge/Firebase-039BE5?style=for-the-badge&logo=Firebase&logoColor=white)
 ![Postman](https://img.shields.io/badge/Postman-FF6C37?style=for-the-badge&logo=postman&logoColor=white)
+![Jest](https://img.shields.io/badge/Jest-C21325?style=for-the-badge&logo=jest&logoColor=white)
+![Babel](https://img.shields.io/badge/Babel-F9DC3E?style=for-the-badge&logo=Babel&logoColor=black)
 ![Prettier](https://img.shields.io/badge/Prettier-F7B93E.svg?style=for-the-badge&logo=Prettier&logoColor=black)
+
+## Getting Started
+
+### Important Notes
+
+- Seed the database before starting the server. It will create an admin account, few accounts for testing, and some products and services.
+
+```sh
+npm run seed
+```
+
+- Seeding the database will create an admin account with the following credentials:
+
+```sh
+email: admin@billion.com
+password: Billion@123
+```
+
+- Seeding also creates a few accounts for testing purposes. The credentials are:
+
+```sh
+email: testuser@billion.com
+password: Billion@123
+```
+
+```sh
+email: testadmin@billion.com
+password: Billion@123
+```
+
+### Prerequisites
+
+- [Node.js](https://nodejs.org/en/download/) (v20.3.0)
+- [PostgreSQL](https://www.postgresql.org/download/) (Local/Cloud)
+- [Postman](https://www.postman.com/downloads/) (Optional)
+- [Firebase](https://firebase.google.com/)
+
+### Installation
+
+1. Clone the repo
+
+   ```sh
+   git clone https://github.com/Tanmay000009/BILLsolutION
+   ```
+
+2. Install NPM packages
+
+   ```sh
+   npm install
+   ```
+
+3. Setup `.env` with `sample.env` as refrence
+
+### Commands
+
+- `npm run start:dev` - Start the development server.
+- `npm run build` - Build the project.
+- `npm run start` - Start the production server.
+- `npm run test` - Run tests.
+- `npm run seed` - Seed the database.
 
 ## Checklist
 
@@ -31,7 +93,7 @@ BILLION is a sophisticated billing system crafted with Node.js and powered by Po
 ### Good to haves
 
 - [ ] Additional API for admin to see all the orders.
-- [ ] Appropriate test cases to simulate practical scenarios that you would want to test the system for.
+- [x] Appropriate test cases to simulate practical scenarios that you would want to test the system for.
 
 <p align="right">(<a href="https://github.com/Tanmay000009/BILLsolutION#billsolution">back to top</a>)</p>
 

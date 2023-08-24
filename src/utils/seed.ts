@@ -49,14 +49,14 @@ const seedUser = {
 };
 
 const testUser = {
-  email: 'testUser@billion.com',
+  email: 'testuser@billion.com',
   firstName: 'testUser',
   lastName: 'testUser',
   password: 'Billion@2023'
 };
 
 const testAdmin = {
-  email: 'testAdmin@billion.com',
+  email: 'testadmin@billion.com',
   firstName: 'testAdmin',
   lastName: 'testAdmin',
   password: 'Billion@2023'
