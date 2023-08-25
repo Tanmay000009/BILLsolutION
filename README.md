@@ -29,6 +29,8 @@ BILLION is a sophisticated billing system crafted with Node.js and powered by Po
 npm run seed
 ```
 
+> When seeding the database, make sure to turn `synchronize: true` in `src/utils.datasource.ts`
+
 - Seeding the database will create an admin account with the following credentials:
 
 ```sh
@@ -80,7 +82,7 @@ password: Billion@123
 - `npm run build` - Build the project.
 - `npm run start` - Start the production server.
 - `npm run test` - Run tests.
-- `npm run seed` - Seed the database.
+- `npm run seed` - Seed the database. (Make sure `syncrhonize: true`)
 
 - The application will be accessible at `http://localhost:3000`.
 
@@ -115,6 +117,33 @@ chmod +x compose.sh
 2. Clone the repository.
 3. Navigate to the root directory of the project.
 4. Take reference from the `.env.example` file to create the environment file `.env` and update the environment variables as needed.
+5. Seed the database using Dockerfile.dev:
+
+```
+   ./seed.sh
+```
+
+OR
+
+> Build the Docker image using the current directory as the build context
+
+```
+docker build -t <image-name>:<tag> .
+```
+
+> Run the Docker container interactively, mapping the required port (3000 in this case)
+> and using the .env file from the host machine as a volume inside the container
+
+```
+docker run -it -p 3000:3000 --env-file .env <image-name>:<tag>
+```
+
+> After the seeding process is done, remove the Docker image
+
+```
+docker rmi <image-name>:<tag>
+```
+
 5. Run the following command to build the Docker image:
 
 ```
