@@ -11,9 +11,6 @@ COPY package*.json ./
 # Install project dependencies
 RUN npm install
 
-# Seed Database
-RUN npm run seed
-
 # Copy the entire application directory into the container
 COPY . .
 
