@@ -9,12 +9,12 @@ const initFirebaseAdmin = async () => {
   });
 
   const app = initializeApp({
-    apiKey: 'AIzaSyDcy8P1b7Sv89MDbMhCZSCiSvPq3MtLCCY',
-    authDomain: 'billsolution09.firebaseapp.com',
-    projectId: 'billsolution09',
-    storageBucket: 'billsolution09.appspot.com',
-    messagingSenderId: '626970134296',
-    appId: '1:626970134296:web:9cca8412d11046b0dbc06d'
+    apiKey: process.env.FIREBASE_API_KEY,
+    authDomain: process.env.FIREBASE_AUTH_DOMAIN,
+    projectId: process.env.FIREBASE_PROJECTID,
+    storageBucket: process.env.FIREBASE_STORAGE_BUCKET,
+    messagingSenderId: process.env.FIREBASE_MESSAGING_SENDERID,
+    appId: process.env.FIREBASE_APPID
   });
 
   const auth = getAuth(app);
