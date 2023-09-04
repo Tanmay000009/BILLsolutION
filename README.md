@@ -50,7 +50,9 @@ email: testadmin@billion.com
 password: Billion@123
 ```
 
-- Keep your Firebase service-account JSON file as `serviceAccount.json` in the root directory.
+- Keep your Firebase [service-account](https://firebase.google.com/support/guides/service-accounts) JSON file as `serviceAccount.json` in the root directory.
+
+- Create a new app in Firebase Project, and add its config credentials to your `.env`. (Take `sample.env` as a reference)
 
 ### Prerequisites
 
@@ -216,8 +218,9 @@ npm run test
 
    > BILLION employs the robust security features provided by Firebase authentication. Firebase offers industry-standard security protocols, including secure password hashing, OAuth2-based authentication, and user identity management.
 
-4. Why Are Firebase Credentials Publicly Available in the Repo?
-   > Firebase credentials are intentionally shared for ease of testing, allowing users to quickly evaluate BILLION's functionality. However, it's essential to follow secure practices for production use to ensure data protection.
+4. Why is the server configured using Firebase Client and Firebase Admin?
+
+   > As the server is currently a standalone server, without any Client app, to support login and other Client functionalities which Firebase only provides in `firebase` (Client package) both are used.
 
 <p align="right">(<a href="https://github.com/Tanmay000009/BILLsolutION#billsolution">back to top</a>)</p>
 
@@ -226,7 +229,7 @@ npm run test
 ### Auth
 
 - Create an account. `POST /auth/signup`
-- Create Admin account. `POST /auth/signup/admin` `Access: Admin`
+- Create an Admin account. `POST /auth/signup/admin` `Access: Admin`
 - Login to an account. `POST /auth/signin`
 - Forgot Password. `POST /auth/forgot-password/:email`
 - Update Password. `POST /auth/update-password`
