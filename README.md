@@ -23,7 +23,7 @@ BILLION is a sophisticated billing system crafted with Node.js and powered by Po
 
 ### Important Notes
 
-- Seed the database before starting the server. It will create an admin account, few accounts for testing, and some products and services.
+- Seed the database before starting the server. It will create an admin account, a few accounts for testing, and some products and services.
 
 ```sh
 npm run seed
@@ -50,6 +50,8 @@ email: testadmin@billion.com
 password: Billion@123
 ```
 
+- Keep your Firebase service-account JSON file as `serviceAccount.json` in the root directory.
+
 ### Prerequisites
 
 - [Node.js](https://nodejs.org/en/download/) (v20.3.0)
@@ -66,7 +68,7 @@ password: Billion@123
    git clone https://github.com/Tanmay000009/BILLsolutION
    ```
 
-2. Setup `.env` with `sample.env` as refrence
+2. Setup `.env` with `sample.env` as reference
 
 ### Running Server Locally
 
@@ -82,7 +84,7 @@ password: Billion@123
 - `npm run build` - Build the project.
 - `npm run start` - Start the production server.
 - `npm run test` - Run tests.
-- `npm run seed` - Seed the database. (Make sure `syncrhonize: true`)
+- `npm run seed` - Seed the database. (Make sure `synchronize: true`)
 
 - The application will be accessible at `http://localhost:3000`.
 
